@@ -1,0 +1,118 @@
+/**
+ * Mock Brands Data
+ */
+
+import type { Brand } from '../../../types';
+
+export const mockBrands: Brand[] = [
+  {
+    id: 'brand-001',
+    slug: 'skinceuticals',
+    name: 'SkinCeuticals',
+    description: 'Advanced skincare backed by science. A leader in antioxidants, corrective serums, and sunscreens.',
+    logo: '/images/brands/skinceuticals.svg',
+    image: '/images/brands/skinceuticals-banner.jpg',
+    productCount: 5,
+  },
+  {
+    id: 'brand-002',
+    slug: 'lamelle',
+    name: 'Lamelle',
+    description: 'South African pharmaceutical skincare brand known for corrective dermocosmetics.',
+    logo: '/images/brands/lamelle.svg',
+    image: '/images/brands/lamelle-banner.jpg',
+    productCount: 4,
+  },
+  {
+    id: 'brand-003',
+    slug: 'la-roche-posay',
+    name: 'La Roche-Posay',
+    description: 'Dermatologist recommended skincare with thermal spring water.',
+    logo: '/images/brands/la-roche-posay.svg',
+    image: '/images/brands/la-roche-posay-banner.jpg',
+    productCount: 3,
+  },
+  {
+    id: 'brand-004',
+    slug: 'dermalogica',
+    name: 'dermalogica',
+    description: 'Professional-grade skincare with skin health as the focus.',
+    logo: '/images/brands/dermalogica.svg',
+    image: '/images/brands/dermalogica-banner.jpg',
+    productCount: 3,
+  },
+  {
+    id: 'brand-005',
+    slug: 'neostrata',
+    name: 'NeoStrata',
+    description: 'Pioneers of alpha hydroxy acids (AHAs) for skin transformation.',
+    logo: '/images/brands/neostrata.svg',
+    image: '/images/brands/neostrata-banner.jpg',
+    productCount: 2,
+  },
+  {
+    id: 'brand-006',
+    slug: 'phformula',
+    name: 'pHformula',
+    description: 'Skin resurfacing treatments and professional skincare solutions.',
+    logo: '/images/brands/phformula.svg',
+    image: '/images/brands/phformula-banner.jpg',
+    productCount: 2,
+  },
+  {
+    id: 'brand-007',
+    slug: 'kiehls',
+    name: "Kiehl's",
+    description: 'Since 1851, naturally-derived ingredients and apothecary heritage.',
+    logo: '/images/brands/kiehls.svg',
+    image: '/images/brands/kiehls-banner.jpg',
+    productCount: 1,
+  },
+  {
+    id: 'brand-008',
+    slug: 'martiderm',
+    name: 'MartiDerm',
+    description: 'Spanish pharmaceutical laboratory specialising in ampoules and treatments.',
+    logo: '/images/brands/martiderm.svg',
+    image: '/images/brands/martiderm-banner.jpg',
+    productCount: 1,
+  },
+  {
+    id: 'brand-009',
+    slug: 'mesoestetic',
+    name: 'Mesoestetic',
+    description: 'Global leader in medical aesthetic skincare from Spain.',
+    logo: '/images/brands/mesoestetic.svg',
+    image: '/images/brands/mesoestetic-banner.jpg',
+    productCount: 1,
+  },
+  {
+    id: 'brand-010',
+    slug: 'huxley',
+    name: 'Huxley',
+    description: 'Korean skincare powered by prickly pear seed oil from the Sahara.',
+    logo: '/images/brands/huxley.svg',
+    image: '/images/brands/huxley-banner.jpg',
+    productCount: 1,
+  },
+  {
+    id: 'brand-011',
+    slug: 'melume',
+    name: 'Melumé',
+    description: 'South African brand specialising in pigmentation and skin brightening.',
+    logo: '/images/brands/melume.svg',
+    image: '/images/brands/melume-banner.jpg',
+    productCount: 1,
+  },
+  {
+    id: 'brand-012',
+    slug: 'jorgobe',
+    name: 'Jorgobé',
+    description: 'Award-winning peel-off masks and natural skincare.',
+    logo: '/images/brands/jorgobe.svg',
+    image: '/images/brands/jorgobe-banner.jpg',
+    productCount: 1,
+  },
+];
+
+export default mockBrands;
