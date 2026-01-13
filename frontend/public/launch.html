@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NewKwa Spar - Dev</title>
+  <style>
+    :root {
+      --bg: #fafafa;
+      --card: #ffffff;
+      --text: #171717;
+      --muted: #737373;
+      --border: #e5e5e5;
+      --primary: #171717;
+      --primary-fg: #fafafa;
+      --error-bg: #fef2f2;
+      --error-border: #fecaca;
+      --error-text: #7f1d1d;
+      --success: #22c55e;
+      --warning: #f59e0b;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0a0a0a;
+        --card: #171717;
+        --text: #fafafa;
+        --muted: #a3a3a3;
+        --border: #262626;
+        --primary: #fafafa;
+        --primary-fg: #171717;
+        --error-bg: #450a0a;
+        --error-border: #7f1d1d;
+        --error-text: #fecaca;
+      }
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    
+    .card {
+      width: 100%;
+      max-width: 28rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    h1 { font-size: 1.25rem; font-weight: 600; }
+    
+    .subtitle {
+      margin-top: 0.5rem;
+      font-size: 0.875rem;
+      color: var(--muted);
+    }
+    
+    .status-box {
+      margin-top: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 0.375rem;
+      padding: 0.75rem;
+      font-size: 0.875rem;
+    }
+    
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.25rem 0;
+    }
+    
+    .status-row + .status-row { margin-top: 0.5rem; }
+    
+    .status-label { color: var(--muted); }
+    
+    .status-value { font-weight: 500; }
+    
+    .status-ready { color: var(--success); }
+    .status-sleeping { color: var(--warning); }
+    
+    .error-box {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      background: var(--error-bg);
+      border: 1px solid var(--error-border);
+      border-radius: 0.375rem;
+      font-size: 0.875rem;
+      color: var(--error-text);
+    }
+    
+    .form-section {
+      margin-top: 1rem;
+    }
+    
+    .form-section h2 {
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    
+    .form-grid {
+      margin-top: 0.75rem;
+      display: grid;
+      gap: 0.75rem;
+    }
+    
+    label {
+      display: grid;
+      gap: 0.25rem;
+    }
+    
+    label span {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    
+    input {
+      height: 2.5rem;
+      padding: 0 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 0.375rem;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 0.875rem;
+    }
+    
+    input:focus {
+      outline: 2px solid var(--primary);
+      outline-offset: 1px;
+    }
+    
+    button {
+      height: 2.5rem;
+      width: 100%;
+      padding: 0 1rem;
+      border: none;
+      border-radius: 0.375rem;
+      background: var(--primary);
+      color: var(--primary-fg);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    
+    button:hover { opacity: 0.9; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    
+    .hint {
+      margin-top: 1rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    
+    .spinner {
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid var(--primary-fg);
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+    }
+    
+    .spinner-large {
+      width: 2rem;
+      height: 2rem;
+      border-width: 3px;
+      border-color: var(--primary);
+      border-top-color: transparent;
+      margin: 0 auto 1rem;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .hidden { display: none !important; }
+    
+    .progress-section {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 0.375rem;
+    }
+    
+    .progress-title {
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .progress-steps {
+      display: grid;
+      gap: 0.5rem;
+    }
+    
+    .progress-step {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8125rem;
+      color: var(--muted);
+    }
+    
+    .progress-step.active {
+      color: var(--text);
+      font-weight: 500;
+    }
+    
+    .progress-step.completed {
+      color: var(--success);
+    }
+    
+    .step-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+    }
+    
+    .step-spinner {
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    .step-check {
+      color: var(--success);
+    }
+    
+    .step-pending {
+      color: var(--muted);
+    }
+    
+    .progress-eta {
+      margin-top: 0.75rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-align: center;
+    }
+    
+    .redirect-notice {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid var(--success);
+      border-radius: 0.375rem;
+      text-align: center;
+      font-size: 0.875rem;
+      color: var(--success);
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🛒 NewKwa Spar - Dev</h1>
+    <p class="subtitle">This environment auto-sleeps after 1 hour of inactivity.</p>
+    
+    <div class="status-box">
+      <div class="status-row">
+        <span class="status-label">Backend</span>
+        <span id="backend-status" class="status-value status-sleeping">Checking...</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">Instance</span>
+        <span id="instance-status" class="status-value">--</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">Service</span>
+        <span id="service-status" class="status-value">--</span>
+      </div>
+    </div>
+    
+    <div id="error-box" class="error-box hidden"></div>
+    
+    <div id="wake-form" class="form-section">
+      <h2>Start backend</h2>
+      <div class="form-grid">
+        <label>
+          <span>Username</span>
+          <input type="text" id="username" autocomplete="username">
+        </label>
+        <label>
+          <span>Password</span>
+          <input type="password" id="password" autocomplete="current-password">
+        </label>
+        <button id="wake-btn" disabled>Start services</button>
+      </div>
+    </div>
+    
+    <div id="continue-section" class="form-section hidden">
+      <button id="continue-btn">Continue to site →</button>
+    </div>
+    
+    <div id="progress-section" class="progress-section hidden">
+      <div class="progress-title">
+        <span class="spinner spinner-large" style="width:1rem;height:1rem;margin:0;border-color:var(--primary);border-top-color:transparent;"></span>
+        <span>Starting services...</span>
+      </div>
+      <div class="progress-steps">
+        <div class="progress-step" id="step-ec2">
+          <span class="step-icon" id="step-ec2-icon">○</span>
+          <span>EC2 Instance: <span id="step-ec2-status">pending</span></span>
+        </div>
+        <div class="progress-step" id="step-ecs">
+          <span class="step-icon" id="step-ecs-icon">○</span>
+          <span>ECS Tasks: <span id="step-ecs-status">waiting</span></span>
+        </div>
+        <div class="progress-step" id="step-health">
+          <span class="step-icon" id="step-health-icon">○</span>
+          <span>Health Check: <span id="step-health-status">waiting</span></span>
+        </div>
+      </div>
+      <div class="progress-eta" id="progress-eta">Usually takes 60-90 seconds</div>
+    </div>
+    
+    <div id="redirect-notice" class="redirect-notice hidden">
+      ✓ Services ready! Redirecting in <span id="redirect-countdown">3</span>s...
+    </div>
+    
+    <p class="hint" id="hint-text">If you see "Sleeping", enter credentials to wake it.</p>
+  </div>
+
+  <script>
+    // Configuration - Update these values
+    const CONFIG = {
+      wakeApiBase: 'https://9po8db9fn7.execute-api.af-south-1.amazonaws.com/dev',
+      appUrl: 'http://13.247.27.53:3000',
+      pollIntervalMs: 2000,
+      redirectDelayMs: 3000
+    };
+
+    // DOM elements
+    const backendStatus = document.getElementById('backend-status');
+    const instanceStatus = document.getElementById('instance-status');
+    const serviceStatus = document.getElementById('service-status');
+    const errorBox = document.getElementById('error-box');
+    const wakeForm = document.getElementById('wake-form');
+    const continueSection = document.getElementById('continue-section');
+    const progressSection = document.getElementById('progress-section');
+    const redirectNotice = document.getElementById('redirect-notice');
+    const redirectCountdown = document.getElementById('redirect-countdown');
+    const hintText = document.getElementById('hint-text');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const wakeBtn = document.getElementById('wake-btn');
+    const continueBtn = document.getElementById('continue-btn');
+    
+    // Progress step elements
+    const stepEc2 = document.getElementById('step-ec2');
+    const stepEc2Icon = document.getElementById('step-ec2-icon');
+    const stepEc2Status = document.getElementById('step-ec2-status');
+    const stepEcs = document.getElementById('step-ecs');
+    const stepEcsIcon = document.getElementById('step-ecs-icon');
+    const stepEcsStatus = document.getElementById('step-ecs-status');
+    const stepHealth = document.getElementById('step-health');
+    const stepHealthIcon = document.getElementById('step-health-icon');
+    const stepHealthStatus = document.getElementById('step-health-status');
+    const progressEta = document.getElementById('progress-eta');
+
+    let isWaking = false;
+    let wakeStartTime = null;
+
+    function showError(msg) {
+      errorBox.textContent = msg;
+      errorBox.classList.remove('hidden');
+    }
+
+    function hideError() {
+      errorBox.classList.add('hidden');
+    }
+
+    function updateButtonState() {
+      const hasCredentials = usernameInput.value && passwordInput.value;
+      wakeBtn.disabled = isWaking || !hasCredentials;
+    }
+    
+    function updateStepStatus(stepEl, iconEl, statusEl, state, text) {
+      statusEl.textContent = text;
+      stepEl.classList.remove('active', 'completed');
+      
+      if (state === 'pending') {
+        iconEl.innerHTML = '○';
+        iconEl.className = 'step-icon step-pending';
+      } else if (state === 'active') {
+        iconEl.innerHTML = '<span class="step-spinner"></span>';
+        iconEl.className = 'step-icon';
+        stepEl.classList.add('active');
+      } else if (state === 'completed') {
+        iconEl.innerHTML = '✓';
+        iconEl.className = 'step-icon step-check';
+        stepEl.classList.add('completed');
+      }
+    }
+    
+    function updateProgressFromStatus(data) {
+      if (!data) return;
+      
+      const instanceState = data.instanceState || 'unknown';
+      const runningCount = data.service?.runningCount || 0;
+      const desiredCount = data.service?.desiredCount || 1;
+      const healthy = data.healthy;
+      
+      // Update EC2 step
+      if (instanceState === 'running') {
+        updateStepStatus(stepEc2, stepEc2Icon, stepEc2Status, 'completed', 'running');
+      } else if (instanceState === 'pending') {
+        updateStepStatus(stepEc2, stepEc2Icon, stepEc2Status, 'active', 'starting...');
+      } else {
+        updateStepStatus(stepEc2, stepEc2Icon, stepEc2Status, 'active', instanceState);
+      }
+      
+      // Update ECS step
+      if (runningCount >= desiredCount && runningCount > 0) {
+        updateStepStatus(stepEcs, stepEcsIcon, stepEcsStatus, 'completed', `${runningCount}/${desiredCount} running`);
+      } else if (instanceState === 'running') {
+        updateStepStatus(stepEcs, stepEcsIcon, stepEcsStatus, 'active', `${runningCount}/${desiredCount} starting...`);
+      } else {
+        updateStepStatus(stepEcs, stepEcsIcon, stepEcsStatus, 'pending', 'waiting for EC2');
+      }
+      
+      // Update health check step
+      if (healthy) {
+        updateStepStatus(stepHealth, stepHealthIcon, stepHealthStatus, 'completed', 'passed');
+      } else if (runningCount >= desiredCount && runningCount > 0) {
+        updateStepStatus(stepHealth, stepHealthIcon, stepHealthStatus, 'active', 'checking...');
+      } else {
+        updateStepStatus(stepHealth, stepHealthIcon, stepHealthStatus, 'pending', 'waiting');
+      }
+      
+      // Update ETA
+      if (wakeStartTime) {
+        const elapsed = Math.floor((Date.now() - wakeStartTime) / 1000);
+        progressEta.textContent = `Elapsed: ${elapsed}s (usually 60-90s)`;
+      }
+    }
+
+    usernameInput.addEventListener('input', updateButtonState);
+    passwordInput.addEventListener('input', updateButtonState);
+
+    async function fetchStatus() {
+      try {
+        const res = await fetch(`${CONFIG.wakeApiBase}/status`, { cache: 'no-store' });
+        if (!res.ok) throw new Error(`Status check failed: ${res.status}`);
+        
+        const data = await res.json();
+        
+        // Update main status display
+        if (data.healthy) {
+          backendStatus.textContent = 'Ready';
+          backendStatus.className = 'status-value status-ready';
+        } else {
+          backendStatus.textContent = 'Sleeping';
+          backendStatus.className = 'status-value status-sleeping';
+        }
+        
+        instanceStatus.textContent = data.instanceState || 'unknown';
+        
+        if (data.service) {
+          serviceStatus.textContent = `${data.service.runningCount}/${data.service.desiredCount} (${data.service.status})`;
+        } else {
+          serviceStatus.textContent = 'unknown';
+        }
+        
+        // Update progress if we're in waking state
+        if (isWaking) {
+          updateProgressFromStatus(data);
+        }
+        
+        // Handle ready state
+        if (data.healthy) {
+          if (isWaking) {
+            // Show redirect notice with countdown
+            progressSection.classList.add('hidden');
+            redirectNotice.classList.remove('hidden');
+            hintText.classList.add('hidden');
+            
+            let countdown = 3;
+            redirectCountdown.textContent = countdown;
+            
+            const countdownInterval = setInterval(() => {
+              countdown--;
+              redirectCountdown.textContent = countdown;
+              if (countdown <= 0) {
+                clearInterval(countdownInterval);
+                window.location.href = CONFIG.appUrl;
+              }
+            }, 1000);
+            
+            isWaking = false;
+          } else {
+            // Already ready, auto-redirect
+            wakeForm.classList.add('hidden');
+            redirectNotice.classList.remove('hidden');
+            hintText.classList.add('hidden');
+            
+            let countdown = 3;
+            redirectCountdown.textContent = countdown;
+            
+            const countdownInterval = setInterval(() => {
+              countdown--;
+              redirectCountdown.textContent = countdown;
+              if (countdown <= 0) {
+                clearInterval(countdownInterval);
+                window.location.href = CONFIG.appUrl;
+              }
+            }, 1000);
+          }
+        }
+        
+        hideError();
+        return data;
+      } catch (e) {
+        showError(e.message);
+        return null;
+      }
+    }
+
+    async function wake() {
+      const username = usernameInput.value;
+      const password = passwordInput.value;
+      
+      if (!username || !password) {
+        showError('Please enter credentials');
+        return;
+      }
+
+      isWaking = true;
+      wakeStartTime = Date.now();
+      wakeBtn.innerHTML = '<span class="spinner"></span>Starting...';
+      updateButtonState();
+      hideError();
+      
+      // Show progress section, hide form
+      wakeForm.classList.add('hidden');
+      progressSection.classList.remove('hidden');
+      hintText.textContent = 'Please wait while services start up...';
+      
+      // Reset progress steps
+      updateStepStatus(stepEc2, stepEc2Icon, stepEc2Status, 'active', 'initiating...');
+      updateStepStatus(stepEcs, stepEcsIcon, stepEcsStatus, 'pending', 'waiting');
+      updateStepStatus(stepHealth, stepHealthIcon, stepHealthStatus, 'pending', 'waiting');
+
+      try {
+        const token = btoa(`${username}:${password}`);
+        const res = await fetch(`${CONFIG.wakeApiBase}/wake`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Basic ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({})
+        });
+
+        if (res.status === 401) {
+          showError('Invalid credentials');
+          isWaking = false;
+          wakeForm.classList.remove('hidden');
+          progressSection.classList.add('hidden');
+          hintText.textContent = 'If you see "Sleeping", enter credentials to wake it.';
+          wakeBtn.textContent = 'Start services';
+          updateButtonState();
+          return;
+        }
+
+        if (!res.ok) {
+          const body = await res.text();
+          showError(`Wake failed: ${res.status} ${body}`);
+          isWaking = false;
+          wakeForm.classList.remove('hidden');
+          progressSection.classList.add('hidden');
+          hintText.textContent = 'If you see "Sleeping", enter credentials to wake it.';
+          wakeBtn.textContent = 'Start services';
+          updateButtonState();
+          return;
+        }
+
+        // Success - keep polling, progress will update automatically
+      } catch (e) {
+        showError(e.message);
+        isWaking = false;
+        wakeForm.classList.remove('hidden');
+        progressSection.classList.add('hidden');
+        hintText.textContent = 'If you see "Sleeping", enter credentials to wake it.';
+        wakeBtn.textContent = 'Start services';
+        updateButtonState();
+      }
+    }
+
+    wakeBtn.addEventListener('click', wake);
+    continueBtn.addEventListener('click', () => {
+      window.location.href = CONFIG.appUrl;
+    });
+
+    // Initial fetch and start polling
+    fetchStatus();
+    setInterval(fetchStatus, CONFIG.pollIntervalMs);
+  </script>
+</body>
+</html>
