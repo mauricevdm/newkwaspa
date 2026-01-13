@@ -1320,11 +1320,18 @@ function createOrdersApi(client: MagentoGraphQLClient): OrdersApi {
 // ============================================================================
 
 export function createMagentoProvider(config?: ProviderConfig): ApiProvider {
+  const clientProxyPath = process.env.NEXT_PUBLIC_MAGENTO_GRAPHQL_PROXY_PATH || '/api/magento/graphql';
+  const upstreamGraphqlUrl =
+    config?.baseUrl
+      ? `${config.baseUrl}/graphql`
+      : process.env.MAGENTO_UPSTREAM_GRAPHQL_URL || process.env.NEXT_PUBLIC_MAGENTO_GRAPHQL_URL || '';
+
+  const graphqlUrl =
+    typeof window === 'undefined' ? upstreamGraphqlUrl : clientProxyPath || upstreamGraphqlUrl;
+
   const magentoConfig: MagentoConfig = {
     apiUrl: config?.baseUrl || process.env.NEXT_PUBLIC_MAGENTO_API_URL || '',
-    graphqlUrl: config?.baseUrl
-      ? `${config.baseUrl}/graphql`
-      : process.env.NEXT_PUBLIC_MAGENTO_GRAPHQL_URL || '',
+    graphqlUrl,
     storeCode: config?.storeCode,
   };
 

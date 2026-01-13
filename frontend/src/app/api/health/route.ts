@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { headers } from 'next/headers';
 
 export async function GET() {
   const health = {
@@ -17,10 +18,18 @@ export async function GET() {
 
 async function checkMagentoHealth(): Promise<'ok' | 'degraded' | 'down'> {
   try {
-    const magentoUrl = process.env.NEXT_PUBLIC_MAGENTO_GRAPHQL_URL;
-    if (!magentoUrl) return 'down';
+    const configuredUrl =
+      process.env.MAGENTO_UPSTREAM_GRAPHQL_URL ||
+      process.env.NEXT_PUBLIC_MAGENTO_GRAPHQL_URL ||
+      '';
 
-    const response = await fetch(magentoUrl, {
+    if (!configuredUrl) return 'down';
+
+    const url = configuredUrl.startsWith('http')
+      ? configuredUrl
+      : new URL(configuredUrl, `https://${(await headers()).get('host')}`).toString();
+
+    const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

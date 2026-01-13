@@ -17,7 +17,7 @@ async function getProduct(slug: string) {
   if (!product) return null;
 
   // Get attributes helper
-  const getAttr = (code: string) => product.attributes?.find(a => a.code === code)?.value;
+  const getAttr = (code: string) => product.attributes?.find((a: { code: string; value: string }) => a.code === code)?.value;
 
   // Transform to the format expected by ProductDetails
   return {
@@ -45,9 +45,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   const product = await getProduct(params.slug);
 
   if (!product) {
-    return {
-      title: 'Product Not Found',
-    };
+    return { title: 'Product Not Found' };
   }
 
   return {
