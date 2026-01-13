@@ -292,6 +292,10 @@ mutation { generateCustomerToken(email, password) }    # Login
 query { customer { orders { items { ... } } } }        # Customer orders
 ```
 
+## Local Development
+
+- Magento via Docker: see [docs/magento-local-docker.md](docs/magento-local-docker.md)
+
 ### Custom AI APIs
 ```
 POST   /api/ai/analyze-skin

@@ -34,6 +34,7 @@ playwright-report/
 .terraform/
 *.tfvars
 !terraform.tfvars.example
+infrastructure/modules/**/lambda/*.zip
 
 # Docker
 *.log

@@ -44,9 +44,16 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 Create a `.env.local` file with the following variables:
 
 ```env
+# API Provider
+NEXT_PUBLIC_API_PROVIDER=magento  # mock | magento
+
 # Magento Configuration
 NEXT_PUBLIC_MAGENTO_API_URL=https://your-magento.com/rest/V1
 NEXT_PUBLIC_MAGENTO_GRAPHQL_URL=https://your-magento.com/graphql
+
+# Recommended (avoids browser CORS): use the built-in Next.js proxy route
+MAGENTO_UPSTREAM_GRAPHQL_URL=https://your-magento.com/graphql
+NEXT_PUBLIC_MAGENTO_GRAPHQL_PROXY_PATH=/api/magento/graphql
 
 # AWS AI Services
 NEXT_PUBLIC_AI_API_URL=https://your-api-gateway.amazonaws.com/prod
