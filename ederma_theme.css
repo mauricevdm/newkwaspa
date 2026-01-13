@@ -1,0 +1,104 @@
+@font-face {
+	font-weight: normal;
+	font-style: normal;
+	font-family: "woodmart-font";
+	src: url("//ederma.co.za/wp-content/themes/woodmart/fonts/woodmart-font-1-400.woff2?v=7.5.2") format("woff2");
+}
+
+:root {
+	--wd-text-font: "Lato", Arial, Helvetica, sans-serif;
+	--wd-text-font-weight: 400;
+	--wd-text-color: #777777;
+	--wd-text-font-size: 14px;
+	--wd-title-font: "Lato", Arial, Helvetica, sans-serif;
+	--wd-title-font-weight: 700;
+	--wd-title-color: #242424;
+	--wd-entities-title-font: "Lato", Arial, Helvetica, sans-serif;
+	--wd-entities-title-font-weight: 700;
+	--wd-entities-title-color: #333333;
+	--wd-entities-title-color-hover: rgb(51 51 51 / 65%);
+	--wd-alternative-font: "Satisfy", Arial, Helvetica, sans-serif;
+	--wd-widget-title-font: "Lato", Arial, Helvetica, sans-serif;
+	--wd-widget-title-font-weight: 700;
+	--wd-widget-title-transform: uppercase;
+	--wd-widget-title-color: #333;
+	--wd-widget-title-font-size: 16px;
+	--wd-header-el-font: "Lato", Arial, Helvetica, sans-serif;
+	--wd-header-el-font-weight: 700;
+	--wd-header-el-transform: uppercase;
+	--wd-header-el-font-size: 13px;
+	--wd-primary-color: rgb(218,191,122);
+	--wd-alternative-color: rgb(40,53,61);
+	--wd-link-color: #333333;
+	--wd-link-color-hover: #242424;
+	--btn-default-bgcolor: #f7f7f7;
+	--btn-default-bgcolor-hover: #efefef;
+	--btn-accented-bgcolor: rgb(218,191,122);
+	--btn-accented-bgcolor-hover: rgba(218,191,122,0.83);
+	--wd-form-brd-width: 1px;
+	--notices-success-bg: #459647;
+	--notices-success-color: #fff;
+	--notices-warning-bg: #E0B252;
+	--notices-warning-color: #fff;
+}
+.woodmart-woocommerce-layered-nav .wd-scroll-content {
+	max-height: 223px;
+}
+.wd-popup.wd-age-verify {
+	--wd-popup-width: 500px;
+}
+.wd-popup.wd-promo-popup {
+	background-color: rgb(255,255,255);
+	background-image: url(https://ederma.co.za/wp-content/uploads/2023/12/Green-Illustrated-Merry-Christmas-and-Happy-New-Year-Greeting-Card-2.png);
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center center;
+	--wd-popup-width: 800px;
+}
+.page-title-default {
+	background-color: rgb(255,255,255);
+	background-image: url(https://ederma.co.za/wp-content/uploads/2025/05/LCM-WEB-LANDSCAPE-1.png);
+	background-size: cover;
+	background-position: center center;
+}
+.footer-container {
+	background-color: #ffffff;
+	background-image: none;
+}
+.wd-popup.popup-quick-view {
+	--wd-popup-width: 920px;
+}
+:root{
+--wd-container-w: 1222px;
+--wd-form-brd-radius: 0px;
+--btn-default-color: #333;
+--btn-default-color-hover: #333;
+--btn-accented-color: #fff;
+--btn-accented-color-hover: #fff;
+--btn-default-brd-radius: 0px;
+--btn-default-box-shadow: none;
+--btn-default-box-shadow-hover: none;
+--btn-default-box-shadow-active: none;
+--btn-default-bottom: 0px;
+--btn-accented-bottom-active: -1px;
+--btn-accented-brd-radius: 0px;
+--btn-accented-box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .15);
+--btn-accented-box-shadow-hover: inset 0 -2px 0 rgba(0, 0, 0, .15);
+--wd-brd-radius: 0px;
+}
+
+@media (min-width: 1239px) {
+.platform-Windows .wd-section-stretch > .elementor-container {
+margin-left: auto;
+margin-right: auto;
+}
+}
+
+@media (min-width: 1222px) {
+html:not(.platform-Windows) .wd-section-stretch > .elementor-container {
+margin-left: auto;
+margin-right: auto;
+}
+}
+
+
