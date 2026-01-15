@@ -1,0 +1,151 @@
+# Magento 2 Quick Development Stack
+# Uses pre-built images for immediate startup
+#
+# Usage: 
+#   1. Create .env with MAGENTO_PUBLIC_KEY and MAGENTO_PRIVATE_KEY
+#   2. docker compose -f docker-compose.quick.yml up -d
+#   3. Wait ~10 minutes for Magento to install on first run
+#   4. Admin: http://localhost:8080/admin (admin/Admin@123)
+#   5. Store: http://localhost:8080
+
+services:
+  # ==========================================================================
+  # Magento Application (pre-built image with all PHP extensions)
+  # ==========================================================================
+  magento:
+    image: shinsenter/magento:php8.2-alpine
+    container_name: dermastore-magento
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+      - "8443:443"
+    environment:
+      # Magento repo credentials - required for first install
+      - COMPOSER_AUTH={"http-basic":{"repo.magento.com":{"username":"${MAGENTO_PUBLIC_KEY}","password":"${MAGENTO_PRIVATE_KEY}"}}}
+      # Magento installation settings
+      - MAGENTO_VERSION=2.4.7
+      - MAGENTO_ADMIN_USER=admin
+      - MAGENTO_ADMIN_PASS=Admin@123
+      - MAGENTO_ADMIN_EMAIL=admin@dermastore.local
+      - MAGENTO_ADMIN_FIRSTNAME=Admin
+      - MAGENTO_ADMIN_LASTNAME=User
+      - MAGENTO_BACKEND_FRONTNAME=admin
+      - MAGENTO_BASE_URL=http://localhost:8080/
+      - MAGENTO_LOCALE=en_US
+      - MAGENTO_CURRENCY=ZAR
+      - MAGENTO_TIMEZONE=Africa/Johannesburg
+      # Database
+      - MAGENTO_DB_HOST=mysql
+      - MAGENTO_DB_NAME=magento
+      - MAGENTO_DB_USER=magento
+      - MAGENTO_DB_PASS=magento_password
+      # Search
+      - MAGENTO_SEARCH_ENGINE=elasticsearch7
+      - MAGENTO_SEARCH_HOST=elasticsearch
+      - MAGENTO_SEARCH_PORT=9200
+      # Skip sample data for faster install
+      - MAGENTO_SKIP_SAMPLE_DATA=true
+      # Developer mode
+      - MAGENTO_MODE=developer
+      # PHP settings
+      - PHP_MEMORY_LIMIT=2G
+      - PHP_MAX_EXECUTION_TIME=1800
+      - DEBUG_LEVEL=0
+    volumes:
+      - magento_data:/var/www/html
+    depends_on:
+      mysql:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    networks:
+      - dermastore
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health_check.php"]
+      interval: 30s
+      timeout: 10s
+      retries: 20
+      start_period: 600s
+
+  # ==========================================================================
+  # MySQL Database
+  # ==========================================================================
+  mysql:
+    image: mysql:8.0
+    container_name: dermastore-mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=magento
+      - MYSQL_USER=magento
+      - MYSQL_PASSWORD=magento_password
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - dermastore
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_password"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    command: --default-authentication-plugin=mysql_native_password --innodb-buffer-pool-size=256M --log-bin-trust-function-creators=1
+
+  # ==========================================================================
+  # Elasticsearch (Catalog Search)
+  # ==========================================================================
+  elasticsearch:
+    image: elasticsearch:7.17.18
+    container_name: dermastore-elasticsearch
+    restart: unless-stopped
+    ports:
+      - "9200:9200"
+    environment:
+      - discovery.type=single-node
+      - cluster.name=dermastore-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+      - xpack.security.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - dermastore
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -q '\"status\":\"green\"\\|\"status\":\"yellow\"'"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 60s
+
+  # ==========================================================================
+  # phpMyAdmin (Optional - Database UI)
+  # ==========================================================================
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: dermastore-phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    environment:
+      - PMA_HOST=mysql
+      - PMA_USER=root
+      - PMA_PASSWORD=root_password
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - dermastore
+
+volumes:
+  magento_data:
+  mysql_data:
+  elasticsearch_data:
+
+networks:
+  dermastore:
+    driver: bridge
